@@ -62,7 +62,24 @@ export async function acceptFriendRequest(requestId) {
   return response.data;
 }
 
+export async function rejectFriendRequest(requestId) {
+  const response = await axiosInstance.put(`/users/friend-request/${requestId}/reject`);
+  return response.data;
+}
+
 export async function getStreamToken() {
   const response = await axiosInstance.get("/chat/token");
+  return response.data;
+}
+
+export async function getPreviousMessages(userId,language){
+  const response= await axiosInstance.get(`/chat/ai/history/${userId}/${language}`);
+  return response.data;
+}
+
+export async function generateResponse(message){
+  const response= await axiosInstance.post("/chat/ai",
+    { message }, // send as JSON object(always)
+  );
   return response.data;
 }

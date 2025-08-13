@@ -7,12 +7,15 @@ import NotificationsPage from "./pages/NotificationsPage.jsx";
 import CallPage from "./pages/CallPage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
 import OnboardingPage from "./pages/OnboardingPage.jsx";
+import AI from './pages/AI.jsx';
 
 import {Toaster} from "react-hot-toast";
 import PageLoader from './components/PageLoader.jsx';
 import useAuthUser from './hooks/useAuthUser.js';
 import Layout from './components/Layout.jsx';
-import {useThemeStore} from "./store/useThemeStore.js"
+import {useThemeStore} from "./store/useThemeStore.js";
+
+
 const App = () => {
 
   const {theme}= useThemeStore();
@@ -24,7 +27,7 @@ const App = () => {
   if(isLoading) return <PageLoader />;
 
   return (
-    <div className="h-screen" data-theme={theme}>
+    <div className="min-h-screen" data-theme={theme}>
 
       <Routes>
 
@@ -67,6 +70,14 @@ const App = () => {
 
         <Route path="/onboarding" element={
           isAuthenticated ? (!isOnboarded ? <OnboardingPage/> : <Navigate to="/" />) : (<Navigate to="/login" />)
+        }/>
+
+        <Route path="/chat/ai" element={
+          isAuthenticated && isOnboarded ? 
+          (<Layout showSidebar={true}>
+            <AI/>
+          </Layout> ) :  
+          <Navigate to={isAuthenticated ? "/onboarding" : "/login"} />
         }/>
 
       </Routes>

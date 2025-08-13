@@ -147,3 +147,23 @@ export async function getOutgoingFriendReqs(req, res) {
     res.status(500).json({message: "Internal Server Error"});
   }
 }
+
+export async function rejectFriendRequest(req, res) {
+    try {
+        const userId=req.user._id;
+        const {id:requestId}=req.params;
+
+        const result = await FriendRequest.deleteOne({
+            _id: requestId,
+            $or: [
+                { sender: userId },
+                { recipient: userId }
+            ],
+            status: "pending"
+        });
+        res.status(200).json({message: "friend request rejected"});
+    } catch (error) {
+        console.log("Error in rejectingFriendReqs controller", error.message);
+        res.status(500).json({message: "Internal Server Error"});
+    }
+}
